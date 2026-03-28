@@ -50,7 +50,85 @@ document.addEventListener('DOMContentLoaded', () => {
         observer.observe(el);
     });
 
-    // 4. Hero Initial Loader
+    // 5. Theme Switching Logic
+    const themeSwitcher = {
+        btn: document.getElementById('theme-toggle'),
+        menu: document.getElementById('theme-menu'),
+        options: document.querySelectorAll('.theme-option'),
+        html: document.documentElement,
+        storageKey: 'portfolio-theme',
+
+        init() {
+            if (!this.btn || !this.menu) return;
+
+            // Load saved theme or default to system
+            const savedTheme = localStorage.getItem(this.storageKey) || 'system';
+            this.setTheme(savedTheme);
+
+            // Toggle menu
+            this.btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                this.menu.classList.toggle('active');
+            });
+
+            // Close menu on outside click
+            document.addEventListener('click', () => {
+                this.menu.classList.remove('active');
+            });
+
+            // Option selection
+            this.options.forEach(opt => {
+                opt.addEventListener('click', () => {
+                    const theme = opt.getAttribute('data-theme');
+                    this.setTheme(theme);
+                    localStorage.setItem(this.storageKey, theme);
+                    this.menu.classList.remove('active');
+                });
+            });
+
+            // Listen for system changes if system is active
+            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+                if (localStorage.getItem(this.storageKey) === 'system' || !localStorage.getItem(this.storageKey)) {
+                    this.applyTheme('system');
+                }
+            });
+        },
+
+        setTheme(theme) {
+            // Update active state in UI
+            this.options.forEach(opt => {
+                const isActive = opt.getAttribute('data-theme') === theme;
+                opt.classList.toggle('active', isActive);
+            });
+
+            // Update button icon
+            const icon = this.btn.querySelector('i');
+            const iconNames = {
+                light: 'sun',
+                dark: 'moon',
+                system: 'monitor'
+            };
+            if (icon && iconNames[theme]) {
+                icon.setAttribute('data-lucide', iconNames[theme]);
+                lucide.createIcons();
+            }
+
+            this.applyTheme(theme);
+        },
+
+        applyTheme(theme) {
+            if (theme === 'system') {
+                const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                this.html.setAttribute('data-theme', isDark ? 'dark' : 'light');
+            } else {
+                this.html.setAttribute('data-theme', theme);
+            }
+        }
+    };
+
+    themeSwitcher.init();
+
+    // 6. Hero Initial Loader
     setTimeout(() => {
         document.querySelector('.hero-text')?.classList.add('active');
         document.querySelector('.profile-img')?.classList.add('active');
