@@ -4,17 +4,49 @@
 */
 
 :root {
-    --text-primary: #0f172a;
-    --text-secondary: #475569;
-    --accent: #6366f1;
-    --accent-hover: #4f46e5;
+    --bg-primary: #ffffff;
+    --bg-secondary: #fdfeff;
+    --text-primary: #0a0a0c;
+    --text-secondary: #4a4a4e;
+    --accent: #4f46e5;
+    --accent-hover: #4338ca;
+    --verify-color: #4f46e5;
+    --tag-bg: rgba(79, 70, 229, 0.08);
     --surface: rgba(255, 255, 255, 0.7);
-    --surface-border: rgba(255, 255, 255, 0.4);
-    --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-    --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
-    --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.05);
+    --surface-border: rgba(0, 0, 0, 0.08);
+    --surface-solid: #ffffff;
+    --navbar-bg: rgba(255, 255, 255, 0.85);
+    --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.03);
+    --shadow-md: 0 12px 24px rgba(0, 0, 0, 0.06);
+    --shadow-lg: 0 20px 40px rgba(0, 0, 0, 0.1);
     --font-heading: 'Space Grotesk', sans-serif;
     --font-body: 'Inter', sans-serif;
+    --mesh-opacity: 0.04;
+    --noise-opacity: 0.02;
+    --form-bg: #f8fafc;
+    --footer-bg: #0f172a;
+}
+
+[data-theme="dark"] {
+    --bg-primary: #0b0f1a;
+    --bg-secondary: #05070a;
+    --text-primary: #f1f5f9;
+    --text-secondary: #94a3b8;
+    --accent: #818cf8;
+    --accent-hover: #a5b4fc;
+    --verify-color: #a5b4fc;
+    --tag-bg: rgba(129, 140, 248, 0.1);
+    --surface: rgba(30, 41, 59, 0.6);
+    --surface-border: rgba(255, 255, 255, 0.08);
+    --surface-solid: #1e293b;
+    --navbar-bg: rgba(11, 15, 26, 0.85);
+    --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 12px 24px rgba(0, 0, 0, 0.4);
+    --shadow-lg: 0 20px 40px rgba(0, 0, 0, 0.5);
+    --mesh-opacity: 0.12;
+    --noise-opacity: 0.05;
+    --form-bg: #111827;
+    --footer-bg: #030712;
 }
 
 * {
@@ -31,12 +63,13 @@ html {
 body {
     font-family: var(--font-body);
     color: var(--text-primary);
-    background: #fff;
+    background: var(--bg-primary);
     line-height: 1.5;
     overflow-x: hidden;
     width: 100%;
     position: relative;
     -webkit-font-smoothing: antialiased;
+    transition: background-color 0.4s ease, color 0.4s ease;
 }
 
 img,
@@ -56,12 +89,12 @@ svg {
     width: 100vw;
     height: 100vh;
     z-index: -1;
-    background-color: #f8fafc;
+    background-color: var(--bg-secondary);
     background-image:
-        radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.03) 0px, transparent 50%),
-        radial-gradient(at 100% 0%, rgba(99, 102, 241, 0.03) 0px, transparent 50%),
-        radial-gradient(at 100% 100%, rgba(236, 72, 153, 0.02) 0px, transparent 50%),
-        radial-gradient(at 50% 50%, rgba(255, 255, 255, 0.5) 0px, transparent 100%);
+        radial-gradient(at 0% 0%, rgba(99, 102, 241, var(--mesh-opacity)) 0px, transparent 50%),
+        radial-gradient(at 100% 0%, rgba(99, 102, 241, var(--mesh-opacity)) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(236, 72, 153, calc(var(--mesh-opacity) * 0.6)) 0px, transparent 50%),
+        radial-gradient(at 50% 50%, var(--bg-primary), transparent 100%);
 }
 
 .mesh-bg::after {
@@ -88,7 +121,7 @@ svg {
     width: 100%;
     height: 100%;
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-    opacity: 0.015;
+    opacity: var(--noise-opacity);
     mix-blend-mode: overlay;
     pointer-events: none;
 }
@@ -116,13 +149,14 @@ h4 {
     top: 0;
     left: 0;
     width: 100%;
-    background: rgba(255, 255, 255, 0.75);
+    background: var(--navbar-bg);
     backdrop-filter: blur(32px);
     -webkit-backdrop-filter: blur(32px);
     border-bottom: 1px solid var(--surface-border);
     z-index: 99999;
     /* Absolute top priority */
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
+    transition: background-color 0.4s ease, border-color 0.4s ease;
 }
 
 main {
@@ -133,10 +167,16 @@ main {
 .nav-container {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 1rem 5%;
+    padding: 0.8rem 5%;
     display: flex;
     justify-content: space-between;
     align-items: center;
+}
+
+nav {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
 }
 
 .logo {
@@ -163,11 +203,125 @@ main {
     color: var(--text-secondary);
     font-weight: 500;
     font-size: 0.95rem;
-    transition: color 0.3s;
+    transition: all 0.3s ease;
+    position: relative;
+    padding: 0.2rem 0;
+}
+
+.nav-links a::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: var(--accent);
+    transition: width 0.3s ease;
+    border-radius: 100px;
 }
 
 .nav-links a:hover {
+    color: var(--accent);
+}
+
+.nav-links a:hover::after {
+    width: 100%;
+}
+
+/* Theme Switcher */
+.theme-switcher {
+    position: relative;
+    margin-left: 1rem;
+}
+
+.theme-btn {
+    background: var(--surface);
+    border: 1px solid var(--surface-border);
     color: var(--text-primary);
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+
+.theme-btn:hover {
+    background: var(--surface-solid);
+    border-color: var(--accent);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-sm);
+}
+
+.theme-menu {
+    position: absolute;
+    top: calc(100% + 1rem);
+    right: 0;
+    background: var(--surface-solid);
+    border: 1px solid var(--surface-border);
+    border-radius: 16px;
+    padding: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    min-width: 140px;
+    box-shadow: var(--shadow-lg);
+    opacity: 0;
+    transform: translateY(10px) scale(0.95);
+    pointer-events: none;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 10000;
+    backdrop-filter: blur(20px);
+}
+
+.theme-menu.active {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    pointer-events: auto;
+}
+
+.theme-option {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    padding: 0.75rem 1rem;
+    border-radius: 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-family: var(--font-body);
+    font-weight: 500;
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+    width: 100%;
+    text-align: left;
+}
+
+.theme-option:hover {
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+}
+
+.theme-option.active {
+    color: var(--accent);
+    background: rgba(99, 102, 241, 0.1);
+}
+
+.theme-option i {
+    width: 18px;
+    height: 18px;
+}
+
+@media (max-width: 768px) {
+    .theme-switcher {
+        margin-left: 0;
+        margin-right: 0;
+        z-index: 10001; /* Keep above nav links in mobile */
+    }
 }
 
 /* Hero Section */
@@ -298,7 +452,7 @@ main {
 }
 
 .btn-outline:hover {
-    background-color: rgba(255, 255, 255, 0.8);
+    background-color: var(--surface-solid);
     transform: translateY(-2px);
     box-shadow: var(--shadow-md);
 }
@@ -545,7 +699,7 @@ Responsive Design (Mobile & Tablet)
         width: 80%;
         max-width: 300px;
         height: 100vh;
-        background: rgba(255, 255, 255, 0.98);
+        background: var(--bg-primary);
         backdrop-filter: blur(20px);
         flex-direction: column;
         justify-content: center;
@@ -697,7 +851,7 @@ Responsive Design (Mobile & Tablet)
 }
 
 .course-card {
-    background: rgba(255, 255, 255, 0.82);
+    background: var(--surface);
     border: 1px solid var(--surface-border);
     padding: 1.75rem;
     border-radius: 1.5rem;
@@ -722,7 +876,7 @@ Responsive Design (Mobile & Tablet)
 .course-card:hover {
     transform: translateY(-8px);
     transform: translateY(-10px);
-    background: white;
+    background: var(--surface-solid);
     box-shadow: var(--shadow-lg);
     border-color: rgba(99, 102, 241, 0.3);
 }
@@ -730,7 +884,7 @@ Responsive Design (Mobile & Tablet)
 .course-icon {
     width: 60px;
     height: 60px;
-    background: white;
+    background: var(--surface-solid);
     padding: 1rem;
     border-radius: 1.25rem;
     display: flex;
@@ -770,64 +924,18 @@ Responsive Design (Mobile & Tablet)
     overflow: hidden;
 }
 
-.course-info p {
-    font-size: 0.88rem;
-    color: var(--text-secondary);
-    line-height: 1.6;
-    margin-bottom: 1.25rem;
-    display: -webkit-box;
-    -webkit-line-clamp: 4;
-    line-clamp: 4;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-}
-
-.course-footer {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 1rem;
-    margin-top: auto;
-    width: 100%;
-}
-
-.credential-link {
-    font-size: 0.75rem;
-    color: white;
-    text-decoration: none;
-    font-weight: 700;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.35rem;
-    background: var(--accent);
-    padding: 0.35rem 0.85rem;
-    border-radius: 100px;
-    box-shadow: 0 4px 10px -2px rgba(99, 102, 241, 0.3);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.credential-link:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 15px -2px rgba(99, 102, 241, 0.4);
-    background: var(--accent-hover);
-}
-
-.credential-link svg {
-    width: 12px;
-    height: 12px;
-}
-
 .course-info h3 {
-    font-size: 1.25rem;
-    margin-bottom: 0.5rem;
+    font-size: 1.2rem;
+    font-weight: 700;
     color: var(--text-primary);
+    margin-bottom: 0.5rem;
 }
 
 .course-info p {
     font-size: 0.95rem;
     color: var(--text-secondary);
-    margin-bottom: 1rem;
     line-height: 1.6;
+    margin-bottom: 1.25rem;
 }
 
 .course-tag {
@@ -836,13 +944,63 @@ Responsive Design (Mobile & Tablet)
     text-transform: uppercase;
     letter-spacing: 1px;
     color: var(--accent);
-    background: rgba(99, 102, 241, 0.05);
-    padding: 0.25rem 0.75rem;
+    background: var(--tag-bg);
+    padding: 0.35rem 0.75rem;
     border-radius: 100px;
-    border: 1px solid rgba(99, 102, 241, 0.1);
+    border: 1px solid rgba(129, 140, 248, 0.15);
 }
 
-/* Projects */
+.course-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 1.5rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--surface-border);
+    width: 100%;
+}
+
+@media (max-width: 480px) {
+    .course-footer {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+}
+
+.credential-link {
+    font-size: 0.85rem;
+    color: var(--verify-color);
+    text-decoration: none;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    padding: 0.5rem 0.8rem;
+    background: var(--tag-bg);
+    border-radius: 8px;
+    border: 1px solid transparent;
+}
+
+.credential-link:hover {
+    color: var(--accent);
+    background: white;
+    transform: translateY(-2px);
+    border-color: var(--accent);
+    box-shadow: var(--shadow-sm);
+}
+
+.credential-link i {
+    width: 14px;
+    height: 14px;
+    transition: transform 0.3s ease;
+}
+
+.credential-link:hover i {
+    transform: translate(2px, -2px);
+}
 .projects-section {
     padding-top: 6rem;
     padding-bottom: 6rem;
@@ -936,7 +1094,7 @@ Responsive Design (Mobile & Tablet)
     transform: translateY(-12px);
     box-shadow: 0 40px 80px -20px rgba(99, 102, 241, 0.2);
     border-color: rgba(99, 102, 241, 0.4);
-    background: white;
+    background: var(--surface-solid);
 }
 
 .card-image {
@@ -976,7 +1134,7 @@ Responsive Design (Mobile & Tablet)
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
-    background: linear-gradient(to bottom, transparent, rgba(99, 102, 241, 0.02));
+    background: linear-gradient(to bottom, transparent, rgba(99, 102, 241, calc(var(--mesh-opacity) * 0.5)));
 }
 
 .card-content h3 {
@@ -1079,7 +1237,7 @@ Responsive Design (Mobile & Tablet)
     left: -50%;
     width: 200%;
     height: 200%;
-    background: radial-gradient(circle at center, rgba(99, 102, 241, 0.1) 0%, rgba(236, 72, 153, 0.05) 30%, transparent 60%);
+    background: radial-gradient(circle at center, rgba(99, 102, 241, var(--mesh-opacity)) 0%, rgba(236, 72, 153, calc(var(--mesh-opacity) * 0.6)) 30%, transparent 60%);
     animation: rotateGradient 25s linear infinite;
     z-index: 0;
     pointer-events: none;
@@ -1101,11 +1259,11 @@ Responsive Design (Mobile & Tablet)
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 5rem;
-    background: rgba(255, 255, 255, 0.85);
+    background: var(--form-bg);
     padding: 4rem;
     border-radius: 2rem;
-    border: 1px solid rgba(255, 255, 255, 0.9);
-    box-shadow: 0 20px 40px -10px rgba(99, 102, 241, 0.1);
+    border: 1px solid var(--surface-border);
+    box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.1);
     backdrop-filter: blur(24px);
     -webkit-backdrop-filter: blur(24px);
     transition: transform 0.4s ease, box-shadow 0.4s ease;
@@ -1145,6 +1303,19 @@ Responsive Design (Mobile & Tablet)
     border: 1px solid var(--surface-border);
     backdrop-filter: blur(10px);
     width: fit-content;
+    position: relative;
+    overflow: hidden;
+}
+
+.social-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 3px;
+    background: var(--accent);
+    transition: width 0.3s ease;
 }
 
 .social-link i,
@@ -1157,10 +1328,14 @@ Responsive Design (Mobile & Tablet)
 
 .social-link:hover {
     color: var(--accent);
-    background: #fff;
+    background: var(--surface-solid);
     transform: translateX(10px);
     border-color: var(--accent);
     box-shadow: var(--shadow-md);
+}
+
+.social-link:hover::after {
+    width: 100%;
 }
 
 .social-link:hover i {
@@ -1199,7 +1374,7 @@ Responsive Design (Mobile & Tablet)
     border-radius: 1rem;
     font-family: var(--font-body);
     font-size: 1rem;
-    background: rgba(255, 255, 255, 0.8);
+    background: var(--form-bg);
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     outline: none;
     color: var(--text-primary);
@@ -1210,7 +1385,7 @@ Responsive Design (Mobile & Tablet)
 .form-group textarea:focus,
 .form-group input:not(:placeholder-shown),
 .form-group textarea:not(:placeholder-shown) {
-    background: #fff;
+    background: var(--surface-solid);
     border-color: rgba(99, 102, 241, 0.4);
     box-shadow: 0 10px 25px -5px rgba(99, 102, 241, 0.15);
 }
@@ -1253,7 +1428,7 @@ Responsive Design (Mobile & Tablet)
 .footer {
     padding-top: 5rem;
     position: relative;
-    background: #0f172a;
+    background: var(--footer-bg);
     color: white;
     margin-top: 4rem;
     overflow: hidden;
@@ -1362,6 +1537,19 @@ Responsive Design (Mobile & Tablet)
     display: inline-flex;
     align-items: center;
     gap: 0.75rem;
+    position: relative;
+    padding: 2px 0;
+}
+
+.footer-column a::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 1.5px;
+    background: #a5b4fc;
+    transition: width 0.3s ease;
 }
 
 .footer-social-links i {
@@ -1374,6 +1562,10 @@ Responsive Design (Mobile & Tablet)
 .footer-column a:hover {
     color: #a5b4fc;
     transform: translateX(5px);
+}
+
+.footer-column a:hover::after {
+    width: 100%;
 }
 
 .footer-column a:hover i {
@@ -1417,7 +1609,7 @@ Responsive Design (Mobile & Tablet)
 }
 
 .back-to-top:hover {
-    background: #4f46e5;
+    background: var(--accent);
     color: white;
     transform: translateY(-3px);
     box-shadow: 0 10px 15px -3px rgba(79, 70, 229, 0.4);
@@ -1436,7 +1628,7 @@ Responsive Design (Mobile & Tablet)
 .skills-section {
     padding: 8rem 0;
     position: relative;
-    background: linear-gradient(135deg, rgba(99, 102, 241, 0.05), rgba(236, 72, 153, 0.05));
+    background: linear-gradient(135deg, rgba(99, 102, 241, var(--mesh-opacity)), rgba(236, 72, 153, calc(var(--mesh-opacity) * 0.8)));
     border-top: 1px solid var(--surface-border);
     border-bottom: 1px solid var(--surface-border);
 }
@@ -1497,7 +1689,7 @@ Responsive Design (Mobile & Tablet)
 
 .skill-card:hover {
     transform: translateY(-10px);
-    background: white;
+    background: var(--surface-solid);
     box-shadow: var(--shadow-lg);
     border-color: var(--accent);
 }
