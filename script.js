@@ -16,6 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const toggleMenu = (open) => {
         els.linksCont.classList.toggle('active', open);
         els.overlay.classList.toggle('active', open);
+        els.toggle?.classList.toggle('active', open);
         els.body.style.overflow = open ? 'hidden' : '';
 
         const icon = els.toggle?.querySelector('i');
