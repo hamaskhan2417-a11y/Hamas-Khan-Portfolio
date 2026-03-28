@@ -2,7 +2,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     // 1. Initialize Lucide Icons
     if (typeof lucide !== 'undefined') lucide.createIcons();
-
+ 
     // 2. Mobile Menu Logic
     const els = {
         toggle: document.querySelector('.menu-toggle'),
